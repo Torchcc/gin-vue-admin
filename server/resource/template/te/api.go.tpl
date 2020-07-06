@@ -72,7 +72,7 @@ func Update{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.{{.StructName}} true "用id查询{{.StructName}}"
+// @Param id query string true "用id查询{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func Find{{.StructName}}(c *gin.Context) {
@@ -91,7 +91,8 @@ func Find{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.{{.StructName}}Search true "分页获取{{.StructName}}列表"
+// @Param page query string true "分页获取{{.StructName}}列表page"
+// @Param pageSize query string true "分页获取{{.StructName}}列表pageSize"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func Get{{.StructName}}List(c *gin.Context) {

@@ -1530,7 +1530,7 @@ var doc = `{
                 "summary": "删除Package",
                 "parameters": [
                     {
-                        "description": "删除Package",
+                        "description": "删除Package, data 只需要传主键id",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -1549,7 +1549,7 @@ var doc = `{
                 }
             }
         },
-        "/pkg/findPackage": {
+        "/pkg/findPackage/{id}": {
             "get": {
                 "security": [
                     {
@@ -1568,13 +1568,11 @@ var doc = `{
                 "summary": "用id查询Package",
                 "parameters": [
                     {
+                        "type": "integer",
                         "description": "用id查询Package",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Package"
-                        }
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1606,13 +1604,18 @@ var doc = `{
                 "summary": "分页获取Package列表",
                 "parameters": [
                     {
-                        "description": "分页获取Package列表",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.PackageSearch"
-                        }
+                        "type": "string",
+                        "description": "分页获取Package列表page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分页获取Package列表pageSize",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2471,6 +2474,10 @@ var doc = `{
         "config.Server": {
             "type": "object",
             "properties": {
+                "biz_mysql": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Mysql"
+                },
                 "captcha": {
                     "type": "object",
                     "$ref": "#/definitions/config.Captcha"
@@ -2649,12 +2656,15 @@ var doc = `{
                     "type": "string"
                 },
                 "create_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "disease": {
                     "type": "integer"
                 },
                 "hospital_id": {
+                    "type": "integer"
+                },
+                "id": {
                     "type": "integer"
                 },
                 "is_deleted": {
@@ -2676,7 +2686,7 @@ var doc = `{
                     "type": "string"
                 },
                 "update_time": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
@@ -2980,56 +2990,6 @@ var doc = `{
             "properties": {
                 "id": {
                     "type": "number"
-                }
-            }
-        },
-        "request.PackageSearch": {
-            "type": "object",
-            "properties": {
-                "avatar_url": {
-                    "type": "string"
-                },
-                "brief": {
-                    "type": "string"
-                },
-                "comment": {
-                    "type": "string"
-                },
-                "create_time": {
-                    "type": "string"
-                },
-                "disease": {
-                    "type": "integer"
-                },
-                "hospital_id": {
-                    "type": "integer"
-                },
-                "is_deleted": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "type": "integer"
-                },
-                "price_original": {
-                    "type": "number"
-                },
-                "price_real": {
-                    "type": "number"
-                },
-                "target": {
-                    "type": "integer"
-                },
-                "tips": {
-                    "type": "string"
-                },
-                "update_time": {
-                    "type": "string"
                 }
             }
         },
