@@ -98,3 +98,9 @@ func GetPackageInfoList(info request.PackageSearch) (err error, list interface{}
 	err = db.Limit(limit).Offset(offset).Find(&pkgs).Error
 	return err, pkgs, total
 }
+
+func UploadPkgAvatar(id uint, filePath string) (err error) {
+	var pkg model.Package
+	err = global.BIZ_DB.Where("id = ?", id).First(&pkg).Update("avatar_url", filePath).Error
+	return err
+}

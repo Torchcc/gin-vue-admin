@@ -137,7 +137,7 @@ export default {
         this.getTableData()
       },
     async update{{.StructName}}(row) {
-      const res = await find{{.StructName}}({ ID: row.ID });
+      const res = await find{{.StructName}}({ id: row.id });
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.re{{.Abbreviation}};
@@ -153,7 +153,7 @@ export default {
     },
     async delete{{.StructName}}(row) {
       this.visible = false;
-      const res = await delete{{.StructName}}({ ID: row.ID });
+      const res = await delete{{.StructName}}({ id: row.id });
       if (res.code == 0) {
         this.$message({
           type: "success",

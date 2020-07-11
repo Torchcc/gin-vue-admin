@@ -3,11 +3,12 @@ package utils
 import (
 	"context"
 	"fmt"
+	"mime/multipart"
+	"time"
+
 	"gin-vue-admin/global"
 	"github.com/qiniu/api.v7/v7/auth/qbox"
 	"github.com/qiniu/api.v7/v7/storage"
-	"mime/multipart"
-	"time"
 )
 
 // 接收两个参数 一个文件流 一个 bucket 你的七牛云标准空间的名字

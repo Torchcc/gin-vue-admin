@@ -9,6 +9,7 @@ import (
 	"gin-vue-admin/model/request"
 	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
+	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -76,10 +77,11 @@ func UpdatePackage(c *gin.Context) {
 // @Produce application/json
 // @Param id path int true "用id查询Package"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /pkg/findPackage/{id} [get]
+// @Router /pkg/findPackage/ [get]
 func FindPackage(c *gin.Context) {
-	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
-	err, repkg := service.GetPackage(uint(id))
+	var pkg model.Package
+	_ = c.ShouldBindQuery(&pkg)
+	err, repkg := service.GetPackage(pkg.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
 	} else {
@@ -109,5 +111,32 @@ func GetPackageList(c *gin.Context) {
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, c)
+	}
+}
+
+func UploadPackageAvatar(c *gin.Context) {
+	_, avatar, err := c.Request.FormFile("avatar")
+	id, _ := strconv.Atoi(c.DefaultPostForm("id", "0"))
+	// 便于找到用户 以后从jwt中取
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("上传文件失败，%v", err), c)
+	} else {
+		// 文件上传后拿到文件路径
+		err, filePath, _ := utils.Upload(avatar)
+		fmt.Print("文件路径: ", filePath)
+		if err != nil {
+			response.FailWithMessage(fmt.Sprintf("接收返回值失败，%v", err), c)
+		} else {
+			// 修改数据库后得到修改后的user并且返回供前端使用
+			err = service.UploadPkgAvatar(uint(id), filePath)
+			if err != nil {
+				response.FailWithMessage(fmt.Sprintf("修改数据库链接失败，%v", err), c)
+			} else {
+				response.OkWithData(struct {
+					AvatarUrl string `json:"avatar_url"`
+					Id        int    `json:"id"`
+				}{AvatarUrl: filePath, Id: id}, c)
+			}
+		}
 	}
 }

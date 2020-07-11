@@ -1,11 +1,9 @@
 // 自动生成模板Package
 package model
 
-import "gin-vue-admin/global"
-
 // 如果含有time.Time 请自行import time包
 type Package struct {
-	ID            uint    `json:"id" gorm:"primary_key"`
+	ID            uint    `json:"id" form:"id" db:"id" gorm:"column:id;comment:'套餐id';primary_key"`
 	HospitalId    int     `json:"hospital_id" form:"hospital_id" gorm:"column:hospital_id;comment:'医院id'"`
 	Name          string  `json:"name" form:"name" gorm:"column:name;comment:'套餐名字'"`
 	Target        int     `json:"target" form:"target" gorm:"column:target;comment:'套餐目标人群'"`
@@ -23,10 +21,4 @@ type Package struct {
 
 func (Package) TableName() string {
 	return "mkp_package"
-}
-
-func (p *Package) Delete() error {
-	const cmd = "UPDATE mkp_package SET is_deleted = 1 WHERE id = ?"
-	_, err := global.BIZ_DBX.Exec(cmd, p.ID)
-	return err
 }
