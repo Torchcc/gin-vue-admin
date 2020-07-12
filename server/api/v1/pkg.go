@@ -140,3 +140,27 @@ func UploadPackageAvatar(c *gin.Context) {
 		}
 	}
 }
+
+func UpdatePkgCtgRelation(c *gin.Context) {
+	var pkgCtg model.PkgWithCategories
+	_ = c.ShouldBindJSON(&pkgCtg)
+	err := service.UpdatePkgCtgRelation(&pkgCtg)
+
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
+
+}
+
+func GetPkgAttrList(c *gin.Context) {
+	var pkgAttr model.PkgAttr
+	_ = c.ShouldBindQuery(&pkgAttr)
+	pkgAttrs, err := service.GetPkgAttrList(pkgAttr.ID)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
+	} else {
+		response.OkWithData(gin.H{"list": pkgAttrs, "id": pkgAttr.ID}, c)
+	}
+}

@@ -22,7 +22,7 @@ Date.prototype.Format = function(fmt) {
 }
 
 export function formatTimeToStr(times, pattern) {
-    var d = new Date(times).Format("yyyy-MM-dd hh:mm:ss");
+    var d = new Date(times * 1000).Format("yyyy-MM-dd hh:mm:ss");
     if (pattern) {
         d = new Date(times).Format(pattern);
     }

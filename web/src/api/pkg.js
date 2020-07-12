@@ -83,3 +83,19 @@ export const createPackage = (data) => {
      })
  }
 
+export const upatePkgCtgRelation = (data) => {
+  return service({
+    url: "/pkg/updatePkgCtgRelation",
+    method: 'put',
+    data
+  })
+
+}
+
+export const getPkgAttrByPkgId = (params) => {
+  return service({
+    url: "/pkg/getPkgAttr",
+    method: "get",
+    params
+  })
+}
