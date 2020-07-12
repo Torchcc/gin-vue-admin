@@ -141,7 +141,7 @@
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
 
-      <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
+      <el-form ref="elForm" :model="formData" :rules="rules" size="large" label-width="100px" label-height="100px">
         <el-col :span="17">
           <el-form-item label="套餐所属医院" prop="hospital_id">
             <el-select v-model="formData.hospital_id" placeholder="请选择套餐所属医院" clearable
