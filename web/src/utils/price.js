@@ -1,4 +1,4 @@
 // 格式化分为单位的金额
 export function formatPrice(price) {
-  return "" + price / 100 + " 元"
+  return "" + price + " 元"
 }

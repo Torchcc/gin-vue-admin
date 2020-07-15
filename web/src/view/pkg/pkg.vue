@@ -3,13 +3,13 @@
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item label="套餐id">
-          <el-input placeholder="搜索条件" v-model="searchInfo.id"></el-input>
+          <el-input placeholder="搜索条件" v-model="searchInfo.id" clearable></el-input>
         </el-form-item>
         <el-form-item label="医院id">
-          <el-input placeholder="搜索条件" v-model="searchInfo.hospital_id"></el-input>
+          <el-input placeholder="搜索条件" v-model="searchInfo.hospital_id" clearable></el-input>
         </el-form-item>
         <el-form-item label="套餐名字">
-          <el-input placeholder="搜索条件" v-model="searchInfo.name"></el-input>
+          <el-input placeholder="搜索条件" v-model="searchInfo.name" clearable></el-input>
         </el-form-item>
         <el-form-item label="套餐目标人群">
           <el-select v-model="searchInfo.target" placeholder="请选择套餐目标人群搜索" clearable :style="{width: '100%'}">
@@ -253,6 +253,7 @@
   import {
     getPkgCategoryList,
   } from "@/api/pkg_category";
+  import {formatPrice} from "@/utils/price";
 
   import {formatTimeToStr} from "@/utils/data";
   import infoList from "@/components/mixins/infoList";
@@ -392,9 +393,7 @@
           return "";
         }
       },
-      formatPrice: function (price) {
-        return "" + price + " 元"
-      }
+      formatPrice: formatPrice
     },
     computed: {
       ...mapGetters('user', ['userInfo', 'token'])
