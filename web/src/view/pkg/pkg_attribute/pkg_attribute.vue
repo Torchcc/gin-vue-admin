@@ -300,7 +300,7 @@
             message: "创建/更改成功"
           })
           this.closeDialog();
-          this.getAllAttrByPkgId(1, 1000);
+          await this.getAllAttrByPkgId(1, 1000);
         }
       },
       openDialog() {

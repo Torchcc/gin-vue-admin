@@ -64,8 +64,8 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
-        <el-form-item label="套餐类别名称" prop="name">
+      <el-form ref="elForm" :model="formData" size="medium" label-width="100px">
+        <el-form-item label="套餐类别名称" prop="name" required>
           <el-input v-model="formData.name" placeholder="请输入套餐类别名称" :maxlength="30" clearable
                     :style="{width: '100%'}"></el-input>
         </el-form-item>

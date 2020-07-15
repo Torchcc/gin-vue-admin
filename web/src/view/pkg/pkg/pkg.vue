@@ -116,7 +116,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="套餐属性" prop="comment" width="140">
+      <el-table-column label="套餐属性" prop="" width="140">
         <template slot-scope="scope">
           <el-button @click="postPkgAttr(scope.row)" size="small" type="primary">变更套餐属性</el-button>
         </template>

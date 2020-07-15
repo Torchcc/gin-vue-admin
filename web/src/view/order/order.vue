@@ -75,6 +75,12 @@
         </el-tag>
       </template>
     </el-table-column>
+
+    <el-table-column label="订单详细项目"  width="140">
+      <template slot-scope="scope">
+        <el-button @click="ShowOrderItem(scope.row)" size="small" type="primary">查看订单详细项目</el-button>
+      </template>
+    </el-table-column>
     
     <el-table-column label="订单备注" prop="remark" width="120"></el-table-column> 
     
@@ -234,6 +240,9 @@ export default {
         this.pageSize = 10               
         this.getTableData()
       },
+    ShowOrderItem(row) {
+        this.$router.push({name: "orderItem", params: {order_id: row.id}})
+    },
     clearFilter() {
       this.$refs.multipleTable.clearFilter();
     },
