@@ -12,10 +12,17 @@
           <el-input placeholder="搜索条件" v-model="searchInfo.name"></el-input>
         </el-form-item>
         <el-form-item label="套餐目标人群">
-          <el-input placeholder="搜索条件" v-model="searchInfo.target"></el-input>
+          <el-select v-model="searchInfo.target" placeholder="请选择套餐目标人群搜索" clearable :style="{width: '100%'}">
+            <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
+                       :value="item.value" :disabled="item.disabled"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="目标疾病">
-          <el-input placeholder="搜索条件" v-model="searchInfo.disease"></el-input>
+          <el-select v-model="searchInfo.disease" placeholder="请选择检测目标高发疾病" clearable
+                     :style="{width: '100%'}">
+            <el-option v-for="(item, index) in diseaseOptions" :key="index" :label="item.label"
+                       :value="item.value" :disabled="item.disabled"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
@@ -35,14 +42,22 @@
     >
       <el-table-column type="selection" width="55"></el-table-column>
 
-      <el-table-column label="套餐id" prop="id" width="120"></el-table-column>
-      <el-table-column label="医院id" prop="hospital_id" width="120"></el-table-column>
+      <el-table-column label="套餐id" prop="id" width="80"></el-table-column>
+      <el-table-column label="医院id" prop="hospital_id" width="80"></el-table-column>
 
-      <el-table-column label="套餐名字" prop="name" width="120"></el-table-column>
+      <el-table-column label="套餐名字" prop="name" width="100"></el-table-column>
 
-      <el-table-column label="套餐目标人群" prop="target" width="120"></el-table-column>
+      <el-table-column label="套餐目标人群" prop="target" width="120">
+        <template slot-scope="scope">
+          <div>{{ scope.row.target | formatTarget }}</div>
+        </template>
+      </el-table-column>
 
-      <el-table-column label="目标疾病" prop="disease" width="120"></el-table-column>
+      <el-table-column label="目标疾病" prop="disease" width="120">
+        <template slot-scope="scope">
+          <div>{{ scope.row.disease | formatDisease }}</div>
+        </template>
+      </el-table-column>
 
       <el-table-column label="门市价" prop="price_original" width="120">
         <template slot-scope="scope">
@@ -50,7 +65,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="真实价格" prop="price_real" width="120">
+      <el-table-column label="真实价格" prop="price_real" width="120" sortable>
         <template slot-scope="scope">
           <div>{{ scope.row.price_real | formatPrice }}</div>
         </template>
@@ -85,7 +100,7 @@
 
       <el-table-column label="套餐温馨提示" prop="tips" width="120"></el-table-column>
 
-      <el-table-column label="套餐类别" prop="ctg_ids" width="120">
+      <el-table-column label="套餐类别" prop="ctg_ids" width="170">
         <template slot-scope="scope">
           <div class="fl-left left-mg-xs">
             <el-select v-model="scope.row.ctg_ids" multiple placeholder="请选择" @blur="putPkgCategory(scope.row)">
@@ -101,13 +116,20 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="创建时间" prop="create_time" width="120">
+      <el-table-column label="套餐属性" prop="comment" width="140">
+        <template slot-scope="scope">
+          <el-button @click="postPkgAttr(scope.row)" size="small" type="primary">变更套餐属性</el-button>
+        </template>
+      </el-table-column>
+
+
+      <el-table-column label="创建时间" prop="create_time" width="120" sortable>
         <template slot-scope="scope">
           <div>{{ scope.row.create_time | formatDate }}</div>
         </template>
       </el-table-column>
 
-      <el-table-column label="更新时间" prop="update_time" width="120">
+      <el-table-column label="更新时间" prop="update_time" width="120" sortable>
         <template slot-scope="scope">
           <div>{{ scope.row.update_time | formatDate }}</div>
         </template>
@@ -140,71 +162,76 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+      <el-row :gutter="15">
+        <el-form ref="elForm" :model="formData" :rules="rules" size="large" label-width="100px" label-height="100px">
+          <el-col :span="17">
+            <el-form-item label="套餐所属医院" prop="hospital_id">
+              <el-select v-model="formData.hospital_id" placeholder="请选择套餐所属医院" clearable
+                         :style="{width: '100%'}">
+                <el-option v-for="(item, index) in hospital_idOptions" :key="index" :label="item.label"
+                           :value="item.value" :disabled="item.disabled"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="17">
+            <el-form-item label="套餐名" prop="name">
+              <el-input v-model="formData.name" placeholder="请输入套餐名" :maxlength="64" clearable
+                        :style="{width: '100%'}"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="17">
+            <el-form-item label="套餐目标人群" prop="target">
+              <el-select v-model="formData.target" placeholder="请选择套餐目标人群" clearable :style="{width: '100%'}">
+                <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
+                           :value="item.value" :disabled="item.disabled"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="17">
+            <el-form-item label="检测目标高发疾病" prop="disease">
+              <el-select v-model="formData.disease" placeholder="请选择检测目标高发疾病" clearable
+                         :style="{width: '100%'}">
+                <el-option v-for="(item, index) in diseaseOptions" :key="index" :label="item.label"
+                           :value="item.value" :disabled="item.disabled"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="17">
+            <el-form-item label="门市价" prop="price_original">
+              <el-input-number v-model="formData.price_original" placeholder="门市价"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="17">
+            <el-form-item label="真实价格" prop="price_real">
+              <el-input-number v-model="formData.price_real" placeholder="真实价格"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="17">
+            <el-form-item label="套餐概述" prop="brief">
+              <el-input v-model="formData.brief" type="textarea" placeholder="请输入套餐概述"
+                        :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="17">
+            <el-form-item label="套餐备注" prop="comment">
+              <el-input v-model="formData.comment" type="textarea" placeholder="请输入套餐备注"
+                        :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="17">
+            <el-form-item label="套餐温馨提示" prop="tips">
+              <el-input v-model="formData.tips" type="textarea" placeholder="请输入套餐温馨提示"
+                        :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item size="large">
+              <el-button @click="resetForm">重置</el-button>
+            </el-form-item>
+          </el-col>
+        </el-form>
 
-      <el-form ref="elForm" :model="formData" :rules="rules" size="large" label-width="100px" label-height="100px">
-        <el-col :span="17">
-          <el-form-item label="套餐所属医院" prop="hospital_id">
-            <el-select v-model="formData.hospital_id" placeholder="请选择套餐所属医院" clearable
-                       :style="{width: '100%'}">
-              <el-option v-for="(item, index) in hospital_idOptions" :key="index" :label="item.label"
-                         :value="item.value" :disabled="item.disabled"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="17">
-          <el-form-item label="套餐名" prop="name">
-            <el-input v-model="formData.name" placeholder="请输入套餐名" :maxlength="64" clearable
-                      :style="{width: '100%'}"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="17">
-          <el-form-item label="套餐目标人群" prop="target">
-            <el-select v-model="formData.target" placeholder="请选择套餐目标人群" clearable :style="{width: '100%'}">
-              <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
-                         :value="item.value" :disabled="item.disabled"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="17">
-          <el-form-item label="检测目标高发疾病" prop="disease">
-            <el-select v-model="formData.disease" placeholder="请选择检测目标高发疾病" clearable
-                       :style="{width: '100%'}">
-              <el-option v-for="(item, index) in diseaseOptions" :key="index" :label="item.label"
-                         :value="item.value" :disabled="item.disabled"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="17">
-          <el-form-item label="门市价" prop="price_original">
-            <el-input-number v-model="formData.price_original" placeholder="门市价"></el-input-number>
-          </el-form-item>
-        </el-col>
-        <el-col :span="17">
-          <el-form-item label="真实价格" prop="price_real">
-            <el-input-number v-model="formData.price_real" placeholder="真实价格"></el-input-number>
-          </el-form-item>
-        </el-col>
-        <el-col :span="17">
-          <el-form-item label="套餐概述" prop="brief">
-            <el-input v-model="formData.brief" type="textarea" placeholder="请输入套餐概述"
-                      :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="17">
-          <el-form-item label="套餐备注" prop="comment">
-            <el-input v-model="formData.comment" type="textarea" placeholder="请输入套餐备注"
-                      :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="17">
-          <el-form-item label="套餐温馨提示" prop="tips">
-            <el-input v-model="formData.tips" type="textarea" placeholder="请输入套餐温馨提示"
-                      :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}"></el-input>
-          </el-form-item>
-        </el-col>
-
-      </el-form>
-
+      </el-row>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -221,8 +248,7 @@
     updatePackage,
     findPackage,
     getPackageList,
-    upatePkgCtgRelation,
-    getPkgAttrByPkgId
+    upatePkgCtgRelation
   } from "@/api/pkg";  //  此处请自行替换地址
   import {
     getPkgCategoryList,
@@ -233,6 +259,7 @@
   import {mapGetters} from "vuex";
 
   const path = process.env.VUE_APP_BASE_API
+  let that
   export default {
     name: "Package",
     mixins: [infoList],
@@ -243,7 +270,6 @@
         visible: false,
         type: "",
         path: path,
-        innerTableData: [],
         ctgOptions: [],
         formData: {
           id: null,
@@ -261,6 +287,41 @@
           update_time: null,
           is_deleted: null,
           ctg_ids: []
+        },
+        rules: {
+          hospital_id: [{
+            required: true,
+            message: '请选择套餐所属医院',
+            trigger: 'change'
+          }],
+          name: [{
+            required: true,
+            message: '请输入套餐名',
+            trigger: 'blur'
+          }],
+          target: [{
+            required: true,
+            message: '请选择套餐目标人群',
+            trigger: 'change'
+          }],
+          disease: [{
+            required: true,
+            message: '请选择检测目标高发疾病',
+            trigger: 'change'
+          }],
+          price_original: [{
+            required: true,
+            message: '门市价',
+            trigger: 'blur'
+          }],
+          price_real: [{
+            required: true,
+            message: '真实价格',
+            trigger: 'blur'
+          }],
+          brief: [],
+          comment: [],
+          tips: [],
         },
         hospital_idOptions: [{
           "label": "美年大健康",
@@ -303,17 +364,26 @@
         }, {
           "label": "糖尿病检测",
           "value": 6
-        }]
+        }],
+        diseaseDict: new Map([[0, "不限"], [1, "食物不耐受检测"], [2, "骨关节疾病体检"],
+          [3, "健康防癌体检"], [4, "幽门螺旋杆菌检测"], [5, "甲状腺检测"], [6, "糖尿病检测"]]),
+        targetDict: new Map([[0, "不限"], [1, "男士"], [2, "女-未婚"], [3, "女-已婚"]])
       };
     },
     filters: {
       formatDate: function (time) {
         if (time != null && time != "") {
-          var date = new Date(time * 1000);
+          let date = new Date(time * 1000);
           return formatTimeToStr(date, "yyyy-MM-dd hh:mm:ss");
         } else {
           return "";
         }
+      },
+      formatDisease: function (diseaseCode) {
+        return that.diseaseDict.get(diseaseCode);
+      },
+      formatTarget: function (targetCode) {
+        return that.targetDict.get(targetCode);
       },
       formatBoolean: function (bool) {
         if (bool != null) {
@@ -323,7 +393,7 @@
         }
       },
       formatPrice: function (price) {
-        return "" + price / 100 + " 元"
+        return "" + price + " 元"
       }
     },
     computed: {
@@ -335,6 +405,13 @@
         this.page = 1
         this.pageSize = 10
         this.getTableData()
+      },
+      resetForm() {
+        this.$refs['elForm'].resetFields()
+      },
+      postPkgAttr(row) {
+        const pkgId = row.id
+        this.$router.push({name: "pkgAttr", params: {pkg_id: pkgId}, query: {pkg_name: row.name}})
       },
       putPkgCategory(row) {
         upatePkgCtgRelation({
@@ -392,7 +469,7 @@
             type: "success",
             message: "删除成功"
           });
-          this.getTableData();
+          await this.getTableData();
         }
       },
       async enterDialog() {
@@ -414,7 +491,7 @@
             message: "创建/更改成功"
           })
           this.closeDialog();
-          this.getTableData();
+          await this.getTableData();
         }
       },
       openDialog() {
@@ -425,6 +502,9 @@
     created() {
       this.getTableData();
       this.getPkgCategoryList();
+    },
+    beforeCreate() {
+      that = this
     }
   };
 </script>

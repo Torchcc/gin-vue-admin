@@ -70,7 +70,6 @@
                     :style="{width: '100%'}"></el-input>
         </el-form-item>
         <el-form-item size="large">
-          <el-button type="primary" @click="submitForm">提交</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -131,6 +130,9 @@ export default {
         this.pageSize = 10        
         this.getTableData()
       },
+    resetForm() {
+      this.$refs['elForm'].resetFields()
+    },
     async updatePkgCategory(row) {
       const res = await findPkgCategory({ id: row.id });
       this.type = "update";

@@ -13,6 +13,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func fen2yuan(p *model.Package) {
+	p.PriceOriginal *= 0.01
+	p.PriceReal *= 0.01
+}
+
+func yuan2fen(p *model.Package) {
+	p.PriceOriginal *= 100
+	p.PriceReal *= 100
+}
+
 // @Tags Package
 // @Summary 创建Package
 // @Security ApiKeyAuth
@@ -24,6 +34,7 @@ import (
 func CreatePackage(c *gin.Context) {
 	var pkg model.Package
 	_ = c.ShouldBindJSON(&pkg)
+	yuan2fen(&pkg)
 	err := service.CreatePackage(pkg)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
@@ -62,6 +73,7 @@ func DeletePackage(c *gin.Context) {
 func UpdatePackage(c *gin.Context) {
 	var pkg model.Package
 	_ = c.ShouldBindJSON(&pkg)
+	yuan2fen(&pkg)
 	err := service.UpdatePackage(&pkg)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
@@ -82,6 +94,7 @@ func FindPackage(c *gin.Context) {
 	var pkg model.Package
 	_ = c.ShouldBindQuery(&pkg)
 	err, repkg := service.GetPackage(pkg.ID)
+	fen2yuan(&repkg)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
 	} else {
@@ -152,15 +165,4 @@ func UpdatePkgCtgRelation(c *gin.Context) {
 		response.OkWithMessage("更新成功", c)
 	}
 
-}
-
-func GetPkgAttrList(c *gin.Context) {
-	var pkgAttr model.PkgAttr
-	_ = c.ShouldBindQuery(&pkgAttr)
-	pkgAttrs, err := service.GetPkgAttrList(pkgAttr.ID)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
-	} else {
-		response.OkWithData(gin.H{"list": pkgAttrs, "id": pkgAttr.ID}, c)
-	}
 }

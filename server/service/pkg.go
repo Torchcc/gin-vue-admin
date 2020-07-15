@@ -89,7 +89,9 @@ func GetPackageInfoList(info request.PackageSearch) (err error, list interface{}
 	pkgIds := make([]uint, len(pkgs))
 	for idx, p := range pkgs {
 		p.CtgIds = make([]uint, 0, 4)
-
+		// 分 -> 元
+		p.PriceReal *= 0.01
+		p.PriceOriginal *= 0.01
 		pkgIds[idx] = p.ID
 		pkgDic[p.ID] = p
 	}
@@ -167,11 +169,4 @@ func UpdatePkgCtgRelation(pkgCtg *model.PkgWithCategories) error {
 		}
 	}
 	return nil
-}
-
-func GetPkgAttrList(pkgId uint) ([]*model.PkgAttr, error) {
-	db := global.BIZ_DB.Model(&model.PkgAttr{})
-	var pkgAttrs []*model.PkgAttr
-	err := db.Where("pkg_id = ?", pkgId).Order("attr_type, order_no").Find(&pkgAttrs).Error
-	return pkgAttrs, err
 }
