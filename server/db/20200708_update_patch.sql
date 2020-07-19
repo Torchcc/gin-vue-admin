@@ -1,4 +1,6 @@
-INSERT INTO `sys_base_menus` VALUES (52, '2020-06-29 13:31:17', '2020-07-07 16:05:34', NULL, 0, 3, 'operation', 'operation', 0, 'view/superAdmin/operation/sysOperationRecord.vue', '操作历史', 'time', NULL, 6, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (57, '2020-06-29 13:31:17', '2020-07-07 16:05:34', NULL, 0, 3, 'operation', 'operation', 0, 'view/superAdmin/operation/sysOperationRecord.vue', '操作历史', 'time', NULL, 6, 0, 0);  -- 已经跑
+INSERT INTO `sys_base_menus` VALUES (58, '2020-06-29 13:31:17', '2020-07-07 16:05:34', NULL, 0, 3, 'dictionary', 'dictionary', 0, 'view/superAdmin/dictionary/sysDictionary.vue', '字典管理', 'time', NULL, 6, 0, 0); -- 已经跑
+INSERT INTO `sys_base_menus` VALUES (59, '2020-06-29 13:31:17', '2020-07-07 16:05:34', NULL, 0, 3, 'dictionaryDetail/:id', 'dictionaryDetail', 1, 'view/superAdmin/dictionary/sysDictionaryDetail.vue', '字典管理详情', 'time', NULL, 6, 0, 0); -- 已经跑
 
 
 INSERT INTO `sys_dictionaries` VALUES (3, '2020-07-05 15:27:31', '2020-07-05 15:27:31', NULL, '数据库int类型', 'int', 1, 'int类型对应的数据库类型');
@@ -46,9 +48,18 @@ INSERT INTO `sys_apis` VALUES (98, '2020-07-05 16:32:08', '2020-07-05 16:32:08',
 INSERT INTO `sys_apis` VALUES (99, '2020-07-07 15:59:53', '2020-07-07 15:59:53', NULL, NULL, '/sysOperationRecord/deleteSysOperationRecordByIds', '批量删除操作历史', 'sysOperationRecord', 'DELETE');
 
 
+INSERT INTO `sys_apis` VALUES (100, '2020-07-07 15:59:53', '2020-07-07 15:59:53', NULL, NULL, '/sysDictionary/findSysDictionary', '根据ID获取系统字典项', 'sysDictionary', 'GET');
+INSERT INTO `sys_apis` VALUES (101, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysDictionary/createSysDictionary', '新增系统字典项', 'sysDictionary', 'POST');
+INSERT INTO `sys_apis` VALUES (102, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysDictionary/deleteSysDictionary', '删除系统字典项', 'sysDictionary', 'DELETE');
+INSERT INTO `sys_apis` VALUES (103, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysDictionary/updateSysDictionary', '更新系统字典项', 'sysDictionary', 'PUT');
+INSERT INTO `sys_apis` VALUES (104, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysDictionary/getSysDictionaryList', '获取系统字典项列表', 'sysDictionary', 'GET');
 
 
-
+INSERT INTO `sys_apis` VALUES (105, '2020-07-07 15:59:53', '2020-07-07 15:59:53', NULL, NULL, '/sysDictionaryDetail/findSysDictionaryDetail', '根据ID获取系统字典项详情', 'sysDictionaryDetail', 'GET');
+INSERT INTO `sys_apis` VALUES (106, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysDictionaryDetail/createSysDictionaryDetail', '新增系统字典项详情', 'sysDictionaryDetail', 'POST');
+INSERT INTO `sys_apis` VALUES (107, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysDictionaryDetail/deleteSysDictionaryDetail', '删除系统字典项详情', 'sysDictionaryDetail', 'DELETE');
+INSERT INTO `sys_apis` VALUES (108, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysDictionaryDetail/updateSysDictionaryDetail', '更新系统字典项详情', 'sysDictionaryDetail', 'PUT');
+INSERT INTO `sys_apis` VALUES (109, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysDictionaryDetail/getSysDictionaryDetailList', '获取系统字典项详情列表', 'sysDictionaryDetail', 'GET');
 -- ----------------------------
 -- Table structure for sys_operation_records
 -- ----------------------------
@@ -85,7 +96,9 @@ INSERT INTO `casbin_rule` VALUES ('p', '888', '/autoCode/getDB', 'GET', '', '', 
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/autoCode/getColume', 'GET', '', '', '');
 
 
-INSERT INTO `sys_authority_menus` VALUES ('888', 52);
+INSERT INTO `sys_authority_menus` VALUES ('888', 57);  -- 已经跑
+INSERT INTO `sys_authority_menus` VALUES ('888', 58);  -- 已经跑
+INSERT INTO `sys_authority_menus` VALUES ('888', 59);  -- 已经跑
 
 
 -- 2020/07/08版本更新补丁
