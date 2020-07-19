@@ -15,6 +15,7 @@
 # 项目文档
 [在线文档](http://doc.henrongyi.top/)
 
+[开发教学](http://doc.henrongyi.top/help/) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - 前端UI框架：[element-ui](https://github.com/ElemeFE/element) 
 - 后台框架：[gin](https://github.com/gin-gonic/gin) 
 
@@ -22,7 +23,12 @@
 
 ### 1.1 项目介绍
 
-[在线预览](http://qmplus.henrongyi.top/)
+[在线预览](http://demo.gin-vue-admin.com/)
+
+测试用户名：admin
+
+测试密码：123456
+
 > Gin-vue-admin是一个基于vue和gin开发的全栈前后端分离的后台管理系统，集成jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
 
 ### 1.2 贡献指南
@@ -258,7 +264,7 @@ swag init
 
 ## 9. 捐赠
 
-如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink:
+如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](http://doc.henrongyi.top/more/coffee.html)
 
 ## 10. 商用注意事项
 
