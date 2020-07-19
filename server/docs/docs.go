@@ -2067,6 +2067,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/model.System"
                         }
                     }
@@ -2126,6 +2127,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/model.System"
                         }
                     }
@@ -2161,6 +2163,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/request.ChangePasswordStruct"
                         }
                     }
@@ -2199,6 +2202,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -2237,6 +2241,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -2275,6 +2280,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/request.SetUserAuth"
                         }
                     }
@@ -2348,6 +2354,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/model.SysWorkflow"
                         }
                     }
@@ -2575,6 +2582,9 @@ var doc = `{
                     "type": "string"
                 },
                 "structName": {
+                    "type": "string"
+                },
+                "tableName": {
                     "type": "string"
                 }
             }

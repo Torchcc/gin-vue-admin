@@ -142,6 +142,8 @@ definitions:
         type: string
       structName:
         type: string
+      tableName:
+        type: string
     type: object
   model.ExaCustomer:
     properties:

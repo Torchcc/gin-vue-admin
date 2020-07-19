@@ -2051,6 +2051,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/model.System"
                         }
                     }
@@ -2110,6 +2111,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/model.System"
                         }
                     }
@@ -2145,6 +2147,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/request.ChangePasswordStruct"
                         }
                     }
@@ -2183,6 +2186,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -2221,6 +2225,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -2259,6 +2264,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/request.SetUserAuth"
                         }
                     }
@@ -2332,6 +2338,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
+                            "type": "object",
                             "$ref": "#/definitions/model.SysWorkflow"
                         }
                     }
@@ -2559,6 +2566,9 @@
                     "type": "string"
                 },
                 "structName": {
+                    "type": "string"
+                },
+                "tableName": {
                     "type": "string"
                 }
             }
