@@ -11,8 +11,8 @@ jwt:
 # mysql connect configuration
 mysql:
     username: root
-    password: 'maikangroot'
-    path: '106.53.124.190:3306'
+    password: '123456'
+    path: '127.0.0.1'
     db-name: 'admin'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
@@ -22,9 +22,9 @@ mysql:
 # mysql connect configuration
 biz_mysql:
     username: root
-    password: 'maikangroot'
-    path: '106.53.124.190:3306'
-    db-name: 'mkhealth'
+    password: '123456'
+    path: '127.0.0.1'
+    db-name: 'biz'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
     max-open-conns: 10
@@ -40,13 +40,13 @@ sqlite:
 
 # 请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址
 qiniu:
-    access-key: '9SyYfyDjCL40pW8HeEg7kdE8TspTDcVkNLD87pMJ'
-    secret-key: 'uWDTlo-06e_uXlKfGvGou77WNNLjw7AOB6gtI9Ol'
-    bucket: 'mk-admin'
-    img-path: 'http://img.mkhealth.club/'
+    access-key: 'PffAiffZmCD%Tenw2HyN@E5N&#wrx8K_'
+    secret-key: 'uWDTlo-%X@c_FZDXYWeM8_#fySfj07CtA3n6yJw'
+    bucket: 'admin_b'
+    img-path: 'http://img.test.club/'
 # redis configuration
 redis:
-    addr: '106.53.124.190:6979'
+    addr: '127.0.0.1:6979'
     password: ''
     db: 15
 
