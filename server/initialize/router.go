@@ -3,7 +3,6 @@ package initialize
 import (
 	_ "gin-vue-admin/docs"
 	"gin-vue-admin/global"
-	"gin-vue-admin/middleware"
 	"gin-vue-admin/router"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
@@ -17,7 +16,7 @@ func Routers() *gin.Engine {
 	// Router.Use(middleware.LoadTls())  // 打开就能玩https了
 	global.GVA_LOG.Debug("use middleware logger")
 	// 跨域
-	Router.Use(middleware.Cors())
+	// Router.Use(middleware.Cors())
 	global.GVA_LOG.Debug("use middleware cors")
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	global.GVA_LOG.Debug("register swagger handler")

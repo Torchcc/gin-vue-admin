@@ -30,10 +30,14 @@ FROM scratch
 ENV \
     ENV_DEPLOY=1 \
     BRANCH=prod\
-    GIN_MODE=release \
     PORT=8888 \
     TZ=Asia/Shanghai \
     SERVICE_NAME=mk-admin
+
+
+
+#  调试完毕后打开
+#    GIN_MODE=release \
 
 # 使用 tar 命令打包系统的时区 /usr/share/zoneinfo 定义压缩文件 zoneinfo.tar.gz
 # 结合 docker ADD 命令可以让时区文件自动解压到 /usr/share/zoneinfo
@@ -50,7 +54,9 @@ COPY ./resource /src/mk-admin/resource
 
 # 从builder镜像中把/src/mk-api/app 拷贝到当前目录
 COPY --from=builder /src/mk-admin/app /src/mk-admin/
-VOLUME /src/mk-admin/ /home/ubuntu/admin
+WORKDIR /src/mk-admin/
+RUN mkdir log
+VOLUME /src/mk-admin/log /home/ubuntu/admin
 
 EXPOSE 8888
 
