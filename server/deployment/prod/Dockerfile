@@ -55,8 +55,7 @@ COPY ./resource /src/mk-admin/resource
 # 从builder镜像中把/src/mk-api/app 拷贝到当前目录
 COPY --from=builder /src/mk-admin/app /src/mk-admin/
 WORKDIR /src/mk-admin/
-RUN mkdir log
-VOLUME /src/mk-admin/log /home/ubuntu/admin
+VOLUME /src/mk-admin /home/ubuntu/admin
 
 EXPOSE 8888
 
