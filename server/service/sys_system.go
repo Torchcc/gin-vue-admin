@@ -4,7 +4,6 @@ import (
 	"gin-vue-admin/config"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
-	"gin-vue-admin/utils"
 )
 
 // @title    GetSystemConfig
@@ -24,10 +23,11 @@ func GetSystemConfig() (err error, conf config.Server) {
 // @return    err            error
 
 func SetSystemConfig(system model.System) (err error) {
-	cs := utils.StructToMap(system.Config)
-	for k, v := range cs {
-		global.GVA_VP.Set(k, v)
-	}
-	err = global.GVA_VP.WriteConfig()
-	return err
+	return nil
+	// cs := utils.StructToMap(system.Config)
+	// for k, v := range cs {
+	// 	global.GVA_VP.Set(k, v)
+	// }
+	// err = global.GVA_VP.WriteConfig()
+	// return err
 }

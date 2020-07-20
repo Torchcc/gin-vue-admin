@@ -1,0 +1,8 @@
+{
+    "env": {
+        "zookeeper": {
+            "host": "172.17.0.1:2182"
+        },
+        "deploy": "prod"
+    }
+}

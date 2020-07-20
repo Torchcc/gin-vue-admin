@@ -26,6 +26,7 @@ func main() {
 	initialize.DBTables()
 	// 程序结束前关闭数据库链接
 	defer global.GVA_DB.Close()
+	defer global.BIZ_DB.Close()
 
 	core.RunWindowsServer()
 }
