@@ -40,6 +40,8 @@ ENV \
 # 将 PRC 复制到 /etc/localtime 可以改变本地时区，从而不需要改 golang 代码
 ADD PRC /etc/localtime
 ADD zoneinfo.tar.gz /
+
+# 需要用https 的时候打开这行
 #ADD https://curl.haxx.se/ca/cacert.pem /etc/ssl/certs/
 
 COPY ./deployment  /src/mk-admin/deployment
@@ -47,6 +49,7 @@ COPY ./resource /src/mk-admin/resource
 
 # 从builder镜像中把/src/mk-api/app 拷贝到当前目录
 COPY --from=builder /src/mk-admin/app /src/mk-admin/
+VOLUME /src/mk-admin/ /home/ubuntu/admin
 
 EXPOSE 8888
 
