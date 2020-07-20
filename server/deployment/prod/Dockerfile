@@ -30,6 +30,7 @@ FROM scratch
 ENV \
     ENV_DEPLOY=1 \
     BRANCH=prod\
+    GIN_MODE=release \
     PORT=8888 \
     TZ=Asia/Shanghai \
     SERVICE_NAME=mk-admin
