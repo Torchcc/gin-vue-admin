@@ -7,7 +7,6 @@ type Package struct {
 	HospitalId    int     `json:"hospital_id" form:"hospital_id" gorm:"column:hospital_id;comment:'医院id'"`
 	Name          string  `json:"name" form:"name" gorm:"column:name;comment:'套餐名字'"`
 	Target        int     `json:"target" form:"target" gorm:"column:target;comment:'套餐目标人群'"`
-	Disease       int     `json:"disease" form:"disease" gorm:"column:disease;comment:''"`
 	PriceOriginal float64 `json:"price_original" form:"price_original" gorm:"column:price_original;comment:'门市价'"`
 	PriceReal     float64 `json:"price_real" form:"price_real" gorm:"column:price_real;comment:''"`
 	AvatarUrl     string  `json:"avatar_url" form:"avatar_url" gorm:"column:avatar_url;comment:''"`

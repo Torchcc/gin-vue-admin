@@ -1,4 +1,4 @@
-﻿
+
 <div align=center>
 <img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width=300" height="300" />
 </div>
@@ -231,7 +231,7 @@ backend code file: model\dnModel\api.go
 
 (1) Development environment course
 > Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/
-    
+
 (2) Template course
 > Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/
 
@@ -244,7 +244,7 @@ backend code file: model\dnModel\api.go
 
 ## 8. Contacts
 ### 8.1 Groups
-| QQ group |  
+| QQ group |
 |  :---:  |
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 ### QQ group: 622360840
