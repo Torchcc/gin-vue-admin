@@ -326,7 +326,7 @@
         },
         hospital_idOptions: [{
           "label": "美年大健康",
-          "value": 0
+          "value": 1
         }, {
           "label": "茂名市人民医院",
           "value": 0
