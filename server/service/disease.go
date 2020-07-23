@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -35,7 +37,9 @@ func DeleteDisease(disease model.Disease) (err error) {
 // @return                    error
 
 func DeleteDiseaseByIds(ids request.IdsReq) (err error) {
-	err = global.BIZ_DB.Delete(&[]model.Disease{}, "id in (?)", ids.Ids).Error
+	db := global.BIZ_DB.Model(&model.Disease{})
+	cmd := fmt.Sprintf("UPDATE %s SET is_deleted = 1 WHERE id IN (?)", model.Disease{}.TableName())
+	err = db.Exec(cmd, ids.Ids).Error
 	return err
 }
 

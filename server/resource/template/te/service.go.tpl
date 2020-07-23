@@ -35,7 +35,9 @@ func Delete{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) 
 // @return                    error
 
 func Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
-	err = global.BIZ_DB.Delete(&[]model.{{.StructName}}{},"id in (?)",ids.Ids).Error
+    db := global.BIZ_DB.Model(&model.{{.StructName}}{})
+	cmd := fmt.Sprintf("UPDATE %s SET is_deleted = 1 WHERE id IN (?)", model.{{.StructName}}{}.TableName())
+	err = db.Exec(cmd, ids.Ids).Error
 	return err
 }
 
