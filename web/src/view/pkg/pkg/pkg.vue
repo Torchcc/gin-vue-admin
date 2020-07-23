@@ -17,13 +17,6 @@
                        :value="item.value" :disabled="item.disabled"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="目标疾病">
-          <el-select v-model="searchInfo.disease" placeholder="请选择检测目标高发疾病" clearable
-                     :style="{width: '100%'}">
-            <el-option v-for="(item, index) in diseaseOptions" :key="index" :label="item.label"
-                       :value="item.value" :disabled="item.disabled"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -55,7 +48,17 @@
 
       <el-table-column label="目标疾病" prop="disease" width="120">
         <template slot-scope="scope">
-          <div>{{ scope.row.disease | formatDisease }}</div>
+          <div class="fl-left left-mg-xs">
+            <el-select v-model="scope.row.disease_ids" multiple placeholder="请选择" filterable>
+              <el-option
+                      v-for="item in diseaseOptions"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+              </el-option>
+            </el-select>
+            <el-button @click="putPkgDisease(scope.row)" type="primary">确 定</el-button>
+          </div>
         </template>
       </el-table-column>
 
@@ -103,7 +106,7 @@
       <el-table-column label="套餐类别" prop="ctg_ids" width="170">
         <template slot-scope="scope">
           <div class="fl-left left-mg-xs">
-            <el-select v-model="scope.row.ctg_ids" multiple placeholder="请选择" @blur="putPkgCategory(scope.row)">
+            <el-select v-model="scope.row.ctg_ids" multiple placeholder="请选择" filterable>
               <el-option
                       v-for="item in ctgOptions"
                       :key="item.id"
@@ -111,6 +114,7 @@
                       :value="item.id">
               </el-option>
             </el-select>
+            <el-button @click="putPkgCategory(scope.row)" type="primary">确 定</el-button>
           </div>
 
         </template>
@@ -188,15 +192,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="17">
-            <el-form-item label="检测目标高发疾病" prop="disease">
-              <el-select v-model="formData.disease" placeholder="请选择检测目标高发疾病" clearable
-                         :style="{width: '100%'}">
-                <el-option v-for="(item, index) in diseaseOptions" :key="index" :label="item.label"
-                           :value="item.value" :disabled="item.disabled"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="17">
             <el-form-item label="门市价" prop="price_original">
               <el-input-number v-model="formData.price_original" placeholder="门市价"></el-input-number>
             </el-form-item>
@@ -248,11 +243,15 @@
     updatePackage,
     findPackage,
     getPackageList,
-    upatePkgCtgRelation
+    upatePkgCtgRelation,
+    upatePkgDiseaseRelation
   } from "@/api/pkg";  //  此处请自行替换地址
   import {
     getPkgCategoryList,
   } from "@/api/pkg_category";
+  import {
+    getDiseaseList
+  } from "@/api/disease"
   import {formatPrice} from "@/utils/price";
 
   import {formatTimeToStr} from "@/utils/data";
@@ -277,7 +276,6 @@
           hospital_id: null,
           name: null,
           target: null,
-          disease: null,
           price_original: null,
           price_real: null,
           avatar_url: null,
@@ -287,7 +285,8 @@
           create_time: null,
           update_time: null,
           is_deleted: null,
-          ctg_ids: []
+          ctg_ids: [],
+          disease_ids: []
         },
         rules: {
           hospital_id: [{
@@ -303,11 +302,6 @@
           target: [{
             required: true,
             message: '请选择套餐目标人群',
-            trigger: 'change'
-          }],
-          disease: [{
-            required: true,
-            message: '请选择检测目标高发疾病',
             trigger: 'change'
           }],
           price_original: [{
@@ -344,30 +338,8 @@
           "label": "女-已婚",
           "value": 3
         }],
-        diseaseOptions: [{
-          "label": "不限",
-          "value": 0
-        }, {
-          "label": "食物不耐受检测",
-          "value": 1
-        }, {
-          "label": "骨关节疾病体检",
-          "value": 2
-        }, {
-          "label": "健康防癌体检",
-          "value": 3
-        }, {
-          "label": "幽门螺旋杆菌检测",
-          "value": 4
-        }, {
-          "label": "甲状腺检测",
-          "value": 5
-        }, {
-          "label": "糖尿病检测",
-          "value": 6
-        }],
-        diseaseDict: new Map([[0, "不限"], [1, "食物不耐受检测"], [2, "骨关节疾病体检"],
-          [3, "健康防癌体检"], [4, "幽门螺旋杆菌检测"], [5, "甲状腺检测"], [6, "糖尿病检测"]]),
+        diseaseOptions: [],
+        diseaseDict: new Map(),
         targetDict: new Map([[0, "不限"], [1, "男士"], [2, "女-未婚"], [3, "女-已婚"]])
       };
     },
@@ -418,10 +390,23 @@
           ctg_ids: row.ctg_ids
         })
       },
+      putPkgDisease(row) {
+        upatePkgDiseaseRelation({
+          id: row.id,
+          disease_ids: row.disease_ids
+        })
+      },
       getPkgCategoryList() {
-        getPkgCategoryList({}).then(res => {
+        getPkgCategoryList({page:1, pageSize: 500}).then(res => {
           if (res.code == 0) {
             this.ctgOptions = res.data.list;
+          }
+        })
+      },
+      getPkgDiseaseList() {
+        getDiseaseList({page:1, pageSize: 500}).then(res => {
+          if (res.code == 0) {
+            this.diseaseOptions = res.data.list;
           }
         })
       },
@@ -448,7 +433,6 @@
           hospital_id: null,
           name: null,
           target: null,
-          disease: null,
           price_original: null,
           price_real: null,
           avatar_url: null,
@@ -501,6 +485,8 @@
     created() {
       this.getTableData();
       this.getPkgCategoryList();
+      this.getPkgDiseaseList();
+      this.getDiseaseDict()
     },
     beforeCreate() {
       that = this

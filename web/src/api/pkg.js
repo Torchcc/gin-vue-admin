@@ -89,7 +89,14 @@ export const upatePkgCtgRelation = (data) => {
     method: 'put',
     data
   })
+}
 
+export const upatePkgDiseaseRelation = (data) => {
+  return service({
+    url: "/pkg/updatePkgDiseaseRelation",
+    method: 'put',
+    data
+  })
 }
 
 export const getPkgAttrByPkgId = (params) => {

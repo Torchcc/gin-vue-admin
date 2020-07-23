@@ -22,7 +22,8 @@ func (Package) TableName() string {
 	return "mkp_package"
 }
 
-type PkgWithCategories struct {
-	CtgIds []uint `json:"ctg_ids"`
+type PkgWithCtgNDisease struct {
+	CtgIds     []uint `json:"ctg_ids"`
+	DiseaseIds []uint `json:"disease_ids"`
 	Package
 }

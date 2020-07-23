@@ -155,9 +155,22 @@ func UploadPackageAvatar(c *gin.Context) {
 }
 
 func UpdatePkgCtgRelation(c *gin.Context) {
-	var pkgCtg model.PkgWithCategories
+	var pkgCtg model.PkgWithCtgNDisease
 	_ = c.ShouldBindJSON(&pkgCtg)
 	err := service.UpdatePkgCtgRelation(&pkgCtg)
+
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
+
+}
+
+func UpdatePkgDiseaseRelation(c *gin.Context) {
+	var pkgDisease model.PkgWithCtgNDisease
+	_ = c.ShouldBindJSON(&pkgDisease)
+	err := service.UpdatePkgDiseaseRelation(&pkgDisease)
 
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)

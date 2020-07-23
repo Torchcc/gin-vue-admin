@@ -22,6 +22,7 @@ func Routers() *gin.Engine {
 	global.GVA_LOG.Debug("register swagger handler")
 	// 方便统一添加路由组前缀 多服务器上线使用
 	ApiGroup := Router.Group("")
+	router.InitDiseaseRouter(ApiGroup)               // 注册套餐高发疾病路由
 	router.InitOrderItemRouter(ApiGroup)             // 注册订单项目路由
 	router.InitOrderRouter(ApiGroup)                 // 注册订单路由
 	router.InitPkgAttrRouter(ApiGroup)               // 注册套餐属性路由
