@@ -20,6 +20,7 @@ func init() {
 	allConfigs["/superconf/admin/jwt"] = &global.GVA_CONFIG.JWT
 	allConfigs["/superconf/admin/captcha"] = &global.GVA_CONFIG.Captcha
 	allConfigs["/superconf/admin/log"] = &global.GVA_CONFIG.Log
+	allConfigs["/superconf/third_party/cos"] = &global.GVA_CONFIG.Cos
 	superconf.NewSuperConfig(&allConfigs)
 	fmt.Printf("the conf for admin sys is: [%#v]", global.GVA_CONFIG)
 }
