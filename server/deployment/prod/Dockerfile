@@ -46,7 +46,7 @@ ADD PRC /etc/localtime
 ADD zoneinfo.tar.gz /
 
 # 需要用https 的时候打开这行
-#ADD https://curl.haxx.se/ca/cacert.pem /etc/ssl/certs/
+ADD https://curl.haxx.se/ca/cacert.pem /etc/ssl/certs/
 
 COPY ./deployment  /src/mk-admin/deployment
 COPY ./resource /src/mk-admin/resource
