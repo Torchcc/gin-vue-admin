@@ -46,7 +46,7 @@
 
     <el-table-column label="套餐id" prop="pkg_id" width="120">
       <template slot-scope="scope">
-        <el-button @click="getPkgDetail(scope.row)" size="small" type="primary">{{scope.row.id}}</el-button>
+        <el-button @click="getPkgDetail(scope.row)" size="small" type="primary">{{scope.row.pkg_id}}</el-button>
       </template>
     </el-table-column>
     
@@ -315,7 +315,7 @@ export default {
         this.getTableData()
       },
     async getPkgDetail(row) {
-      const res = await findPackage({id: row.id})
+      const res = await findPackage({id: row.pkg_id})
       if (res.code === 0) {
         this.pkgFormData = res.data.repkg;
         this.dialogPkgFormVisible=true;
