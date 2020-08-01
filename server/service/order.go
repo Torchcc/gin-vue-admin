@@ -61,13 +61,13 @@ func GetOrderInfoList(info request.OrderSearch) (err error, list interface{}, to
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.BIZ_DB.Model(&model.Order{})
+	db := global.BIZ_DB.Model(&model.Order{}).Where("is_deleted = ?", 0)
 	var orders []model.Order
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.ID != 0 {
 		db = db.Where("id = ?", info.ID)
 	}
-	if info.OutTradeNo != 0 {
+	if info.OutTradeNo != "" {
 		db = db.Where("out_trade_no = ?", info.OutTradeNo)
 	}
 	if info.UserId != 0 {
@@ -83,7 +83,7 @@ func GetOrderInfoList(info request.OrderSearch) (err error, list interface{}, to
 		db = db.Where("status = ?", info.Status)
 	}
 	err = db.Count(&total).Error
-	err = db.Limit(limit).Offset(offset).Find(&orders).Error
+	err = db.Order("create_time DESC").Limit(limit).Offset(offset).Find(&orders).Error
 	// 分->元
 	for idx := range orders {
 		orders[idx].Amount *= 0.01

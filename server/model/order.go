@@ -4,7 +4,7 @@ package model
 // 如果含有time.Time 请自行import time包
 type Order struct {
 	ID         uint    `json:"id" form:"id" gorm:"column:id;comment:'主键id'"`
-	OutTradeNo int     `json:"out_trade_no" form:"out_trade_no" gorm:"column:out_trade_no;comment:'订单号'"`
+	OutTradeNo string  `json:"out_trade_no" form:"out_trade_no" gorm:"column:out_trade_no;comment:'订单号'"`
 	UserId     uint    `json:"user_id" form:"user_id" gorm:"column:user_id;comment:'下单的用户id'"`
 	Mobile     string  `json:"mobile" form:"mobile" gorm:"column:mobile;comment:'下单用户的电话'"`
 	OpenId     string  `json:"open_id" form:"open_id" gorm:"column:open_id;comment:'微信open_id'"`
