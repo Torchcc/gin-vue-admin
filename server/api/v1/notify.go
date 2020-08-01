@@ -11,7 +11,10 @@ import (
 
 func SmsNotifyAppointmentOk(c *gin.Context) {
 	var input model.SmsNotifyAppointmentOkInput
-	_ = c.ShouldBindJSON(&input)
+	if err := c.ShouldBindJSON(&input); err != nil {
+		response.FailWithMessage(fmt.Sprintf("发送失败，%v", err), c)
+		return
+	}
 	err := service.SmsNotifyAppointmentOk(&input)
 
 	if err != nil {
