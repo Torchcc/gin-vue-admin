@@ -82,6 +82,12 @@ func GetOrderInfoList(info request.OrderSearch) (err error, list interface{}, to
 	if info.Status != 0 {
 		db = db.Where("status = ?", info.Status)
 	}
+	if info.IsRefundApplied {
+		db = db.Where("refund_reason_id != ?", 0)
+	}
+	if info.HandleStatusFilter != nil {
+		db = db.Where("handle_status = ?", *info.HandleStatusFilter)
+	}
 	err = db.Count(&total).Error
 	err = db.Order("create_time DESC").Limit(limit).Offset(offset).Find(&orders).Error
 	// 分->元
