@@ -333,7 +333,7 @@
         this.getTableData()
       },
       ShowOrderItem(row) {
-        this.$router.push({name: "orderItem", params: {order_id: row.id}})
+        this.$router.push({name: "orderItem", params: {order_id: row.id}, query: {out_trade_no: row.out_trade_no}})
       },
       clearFilter() {
         this.$refs.multipleTable.clearFilter();

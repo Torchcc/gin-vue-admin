@@ -78,6 +78,9 @@ func GetPackageInfoList(info request.PackageSearch) (err error, list interface{}
 	if info.Target != 0 {
 		db = db.Where("target = ?", info.Target)
 	}
+	if info.ID != 0 {
+		db = db.Where("id = ?", info.ID)
+	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&pkgs).Error
 

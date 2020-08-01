@@ -39,6 +39,7 @@ require (
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.5
 	github.com/tebeka/strftime v0.1.3 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go v3.0.224+incompatible
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.7
 	github.com/unrolled/secure v1.0.7
 	golang.org/x/crypto v0.0.0-20200323165209-0ec3e9974c59 // indirect

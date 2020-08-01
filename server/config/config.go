@@ -1,17 +1,18 @@
 package config
 
 type Server struct {
-	Mysql    Mysql     `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
-	BizMysql Mysql     `mapstructure:"biz_mysql" json:"biz_mysql" yaml:"biz_mysql"`
-	Sqlite   Sqlite    `mapstructure:"sqlite" json:"sqlite" yaml:"sqlite"`
-	Qiniu    Qiniu     `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
-	Casbin   Casbin    `mapstructure:"casbin" json:"casbin" yaml:"casbin"`
-	Redis    Redis     `mapstructure:"redis" json:"redis" yaml:"redis"`
-	System   System    `mapstructure:"system" json:"system" yaml:"system"`
-	JWT      JWT       `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
-	Captcha  Captcha   `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
-	Log      Log       `mapstructure:"log" json:"log" yaml:"log"`
-	Cos      cosConfig `json:"cos"`
+	Mysql         Mysql                `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	BizMysql      Mysql                `mapstructure:"biz_mysql" json:"biz_mysql" yaml:"biz_mysql"`
+	Sqlite        Sqlite               `mapstructure:"sqlite" json:"sqlite" yaml:"sqlite"`
+	Qiniu         Qiniu                `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
+	Casbin        Casbin               `mapstructure:"casbin" json:"casbin" yaml:"casbin"`
+	Redis         Redis                `mapstructure:"redis" json:"redis" yaml:"redis"`
+	System        System               `mapstructure:"system" json:"system" yaml:"system"`
+	JWT           JWT                  `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
+	Captcha       Captcha              `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
+	Log           Log                  `mapstructure:"log" json:"log" yaml:"log"`
+	Cos           cosConfig            `json:"cos"`
+	ApmtOkMsgTmpl smsMsgTemplateConfig `json:"apmt_ok_msg_tmpl"`
 }
 
 type System struct {
@@ -77,4 +78,9 @@ type cosConfig struct {
 	SecretID  string `json:"secret_id"`
 	SecretKey string `json:"secret_key"`
 	Region    string `json:"region"`
+}
+
+type smsMsgTemplateConfig struct {
+	SmsSdkAppid string
+	TemplateID  string // zk 读取
 }

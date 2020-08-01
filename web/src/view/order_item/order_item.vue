@@ -69,7 +69,10 @@
     </el-table-column>
     
     <el-table-column label="体检日期" prop="examine_date" width="120">
-      <template slot-scope="scope">{{scope.row.examine_date|formatDate}}</template>
+
+      <template slot-scope="scope">
+        {{scope.row.examine_date|formatDay}}
+      </template>
 
     </el-table-column>
     
@@ -83,20 +86,21 @@
 
     </el-table-column>
     
-      <el-table-column label="按钮组">
-        <template slot-scope="scope">
-          <el-button @click="updateOrderItem(scope.row)" size="small" type="primary" disabled>变更</el-button>
-          <el-popover placement="top" width="160" v-model="scope.row.visible">
-            <p>确定要删除吗？</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-              <el-button type="primary" size="mini" @click="deleteOrderItem(scope.row)">确定</el-button>
-            </div>
-            <el-button type="danger" icon="el-icon-delete" size="mini" slot="reference" disabled>删除</el-button>
-          </el-popover>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-table-column label="按钮组">
+      <template slot-scope="scope">
+        <el-button @click="notifyAppointmentOk(scope.row)" size="small" type="primary" >短信通知预约成功</el-button>
+        <el-button @click="updateOrderItem(scope.row)" size="small" type="primary" >变更</el-button>
+        <el-popover placement="top" width="160" v-model="scope.row.visible">
+          <p>确定要删除吗？</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="deleteOrderItem(scope.row)">确定</el-button>
+          </div>
+          <el-button type="danger" icon="el-icon-delete" size="mini" slot="reference" disabled>删除</el-button>
+        </el-popover>
+      </template>
+    </el-table-column>
+  </el-table>
 
     <el-pagination
       :current-page="page"
@@ -109,13 +113,6 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-<!--    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">-->
-<!--      此处请使用表单生成器生成form填充 表单默认绑定 formData 如手动修改过请自行修改key-->
-<!--      <div class="dialog-footer" slot="footer">-->
-<!--        <el-button @click="closeDialog">取 消</el-button>-->
-<!--        <el-button @click="enterDialog" type="primary">确 定</el-button>-->
-<!--      </div>-->
-<!--    </el-dialog>-->
     <el-dialog :before-close="closePkgDialog" :visible.sync="dialogPkgFormVisible" title="弹窗操作">
       <el-row :gutter="15">
         <el-form ref="elForm" :model="pkgFormData" size="large" label-width="100px" label-height="100px">
@@ -138,15 +135,6 @@
             <el-form-item label="套餐目标人群" prop="target">
               <el-select v-model="pkgFormData.target" placeholder="请选择套餐目标人群" clearable disabled :style="{width: '100%'}">
                 <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
-                           :value="item.value" :disabled="item.disabled"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="17">
-            <el-form-item label="检测目标高发疾病" prop="disease">
-              <el-select v-model="pkgFormData.disease" placeholder="请选择检测目标高发疾病" clearable disabled
-                         :style="{width: '100%'}">
-                <el-option v-for="(item, index) in diseaseOptions" :key="index" :label="item.label"
                            :value="item.value" :disabled="item.disabled"></el-option>
               </el-select>
             </el-form-item>
@@ -188,9 +176,50 @@
         </el-form>
 
       </el-row>
-
-
     </el-dialog>
+
+
+      <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+<!--        此处请使用表单生成器生成form填充 表单默认绑定 formData 如手动修改过请自行修改key-->
+        <el-form ref="elFormOrderItem" :model="formData" :rules="rules" size="medium" label-width="100px">
+          <el-col :span="12">
+            <el-form-item label="体检日期" prop="examine_date" >
+              <el-date-picker v-model="formData.examine_date" format="yyyy-MM-dd" value-format="timestamp"
+                              :style="{width: '100%'}" placeholder="请选择体检日期" clearable></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="体检人姓名" prop="examinee_name">
+              <el-input v-model="formData.examinee_name" placeholder="请输入体检人姓名" clearable
+                        :style="{width: '100%'}"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="体检人身份证号码" prop="id_card_no">
+              <el-input v-model="formData.id_card_no" placeholder="请输入体检人身份证" clearable
+                        :style="{width: '100%'}"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="体检人电话" prop="examinee_mobile">
+              <el-input v-model="formData.examinee_mobile" placeholder="请输入体检人电话" clearable
+                        :style="{width: '100%'}"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item size="large">
+              <el-button @click="resetForm">重置</el-button>
+            </el-form-item>
+          </el-col>
+        </el-form>
+
+        <div class="dialog-footer" slot="footer">
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button @click="enterDialog" type="primary">确 定</el-button>
+        </div>
+      </el-dialog>
+
+
   </div>
 </template>
 
@@ -202,6 +231,7 @@ import {
     findOrderItem,
     getOrderItemList
 } from "@/api/order_item";  //  此处请自行替换地址
+import {notifyAppointmentOk} from "@/api/notify"
 import { formatTimeToStr } from "@/utils/data";
 import infoList from "@/components/mixins/infoList";
 import {findPackage} from "../../api/pkg";
@@ -235,13 +265,19 @@ export default {
         update_time: null,
         ctg_ids: []
       },
-      hospital_idOptions: [{
-        "label": "美年大健康",
-        "value": 0
-      }, {
-        "label": "茂名市人民医院",
-        "value": 0
-      }],
+      rules: {
+        examinee_name: [],
+        id_card_no: [{
+          required: true,
+          message: '请输入体检人身份证',
+          trigger: 'blur'
+        }],
+        examinee_mobile: [{
+          required: true,
+          message: '请输入体检人电话',
+          trigger: 'blur'
+        }],
+      },
       targetOptions: [{
         "label": "不限",
         "value": 0
@@ -255,28 +291,6 @@ export default {
         "label": "女-已婚",
         "value": 3
       }],
-      diseaseOptions: [{
-        "label": "不限",
-        "value": 0
-      }, {
-        "label": "食物不耐受检测",
-        "value": 1
-      }, {
-        "label": "骨关节疾病体检",
-        "value": 2
-      }, {
-        "label": "健康防癌体检",
-        "value": 3
-      }, {
-        "label": "幽门螺旋杆菌检测",
-        "value": 4
-      }, {
-        "label": "甲状腺检测",
-        "value": 5
-      }, {
-        "label": "糖尿病检测",
-        "value": 6
-      }],
     };
   },
   filters: {
@@ -284,6 +298,14 @@ export default {
       if (time != null && time != "") {
         var date = new Date(time * 1000);
         return formatTimeToStr(date, "yyyy-MM-dd hh:mm:ss");
+      } else {
+        return "";
+      }
+    },
+    formatDay: function(time) {
+      if (time != null && time != "") {
+        var date = new Date(time * 1000);
+        return formatTimeToStr(date, "yyyy-MM-dd");
       } else {
         return "";
       }
@@ -314,6 +336,9 @@ export default {
         this.pageSize = 10                 
         this.getTableData()
       },
+    resetForm() {
+      this.$refs['elFormOrderItem'].resetFields()
+    },
     async getPkgDetail(row) {
       const res = await findPackage({id: row.pkg_id})
       if (res.code === 0) {
@@ -335,6 +360,7 @@ export default {
       this.type = "update";
       if (res.code == 0) {
         this.formData = res.data.reorderItem;
+        this.formData.examine_date *= 1000
         this.dialogFormVisible = true;
       }
     },
@@ -376,6 +402,21 @@ export default {
           update_time:null,
       };
     },
+    notifyAppointmentOk(row) {
+      const res = notifyAppointmentOk({
+        out_trade_no: this.$route.query.out_trade_no,
+        pkg_id: row.pkg_id,
+        examinee_name: row.examinee_name,
+        examine_date: row.examine_date,
+        examinee_mobile: row.examinee_mobile
+      })
+      if (res.code === 0) {
+        this.$message({
+          type: "success",
+          message: "发送成功"
+        });
+      }
+    },
     async deleteOrderItem(row) {
       this.visible = false;
       const res = await deleteOrderItem({ id: row.id });
@@ -389,6 +430,7 @@ export default {
     },
     async enterDialog() {
       let res;
+      this.formData.examine_date *= 0.001
       switch (this.type) {
         case "create":
           res = await createOrderItem(this.formData);
