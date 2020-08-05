@@ -141,6 +141,7 @@
 
       <el-table-column label="按钮组">
         <template slot-scope="scope">
+          <el-button @click="notifyRefundOk(scope.row)" size="small" type="primary">通知已申请退款</el-button>
           <el-button @click="updateOrder(scope.row)" size="small" type="primary">变更</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">
             <p>确定要删除吗？</p>
@@ -204,6 +205,50 @@
         <el-button @click="enterDialog" type="primary">确 定</el-button>
       </div>
     </el-dialog>
+
+
+    <el-dialog :before-close="closeRefundDialog" :visible.sync="dialogRefundFormVisible" title="退款短信通知弹窗操作">
+      <el-row :gutter="15">
+        <el-form ref="elForm" :model="refundFormData" :rules="refundRules" size="medium" label-width="100px">
+          <el-col :span="7">
+            <el-form-item label="订单id" prop="order_id">
+              <el-input-number v-model="refundFormData.order_id" placeholder="订单id" :disabled='true'></el-input-number>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="7">
+            <el-form-item label="订单号" prop="out_trade_no">
+              <el-input-number v-model="refundFormData.out_trade_no" placeholder="订单号" :disabled='true'></el-input-number>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="18">
+            <el-form-item label="套餐id" prop="pkg_id">
+              <el-input-number v-model="refundFormData.pkg_id" placeholder="套餐id"></el-input-number>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="18">
+            <el-form-item label="套餐数量" prop="pkg_count">
+              <el-input-number v-model="refundFormData.pkg_count" placeholder="套餐数量"></el-input-number>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="18">
+            <el-form-item label="退款金额" prop="amount">
+              <el-input-number v-model="refundFormData.amount" placeholder="退款金额"></el-input-number>
+            </el-form-item>
+          </el-col>
+
+        </el-form>
+      </el-row>
+      <div class="dialog-footer" slot="footer">
+        <el-button @click="closeRefundDialog">取 消</el-button>
+        <el-button @click="enterRefundDialog" type="primary">确 定</el-button>
+      </div>
+    </el-dialog>
+
+
   </div>
 </template>
 
@@ -218,6 +263,7 @@
   import {formatTimeToStr} from "@/utils/data";
   import infoList from "@/components/mixins/infoList";
   import {formatPrice} from "@/utils/price";
+  import {notifyRefundOk} from "@/api/notify"
 
   let that
   export default {
@@ -227,6 +273,7 @@
       return {
         listApi: getOrderList,
         dialogFormVisible: false,
+        dialogRefundFormVisible: false,
         visible: false,
         type: "",
         formData: {
@@ -236,6 +283,9 @@
           refund_reason_id: null,
           handle_status: null,
           handle_remark: null
+        },
+        refundFormData: {
+          out_trade_no:null,pkg_id:null,pkg_count:null,amount:null,order_id:null
         },
         rules: {
           id: [{
@@ -250,6 +300,23 @@
           }],
           remark: [{
             message: '请输入备注',
+            trigger: 'blur'
+          }],
+        },
+        refundRules: {
+          pkg_id: [{
+            required: true,
+            message: '套餐id',
+            trigger: 'blur'
+          }],
+          pkg_count: [{
+            required: true,
+            message: '套餐数量',
+            trigger: 'blur'
+          }],
+          amount: [{
+            required: true,
+            message: '退款金额',
             trigger: 'blur'
           }],
         },
@@ -347,6 +414,11 @@
       filterRefundReasonId(value, row) {
         return row.refund_reason_id === value
       },
+      async notifyRefundOk(row) {
+        this.refundFormData.out_trade_no = row.out_trade_no;
+        this.refundFormData.order_id = row.id;
+        this.dialogRefundFormVisible = true;
+      },
       async updateOrder(row) {
         const res = await findOrder({id: row.id});
         this.type = "update";
@@ -376,6 +448,10 @@
           update_time: null,
         };
       },
+      closeRefundDialog() {
+        this.dialogRefundFormVisible = false;
+        this.refundFormData = {out_trade_no:null,pkg_id:null,pkg_count:null,amount:null,order_id:null}
+      },
       async deleteOrder(row) {
         this.visible = false;
         const res = await deleteOrder({id: row.id});
@@ -385,6 +461,16 @@
             message: "删除成功"
           });
           await this.getTableData();
+        }
+      },
+      async enterRefundDialog() {
+        const res = await notifyRefundOk(this.refundFormData);
+        if (res.code === 0) {
+          this.$message({
+            type: "success",
+            message: "发送退款短信成功"
+          })
+          this.closeRefundDialog();
         }
       },
       async enterDialog() {

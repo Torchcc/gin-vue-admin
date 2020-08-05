@@ -9,3 +9,13 @@ export const notifyAppointmentOk = (data) => {
     data
   })
 }
+
+// send sms to notify refund ok
+export const notifyRefundOk = (data) => {
+  return service({
+    url: "/notify/sms/refund_ok/",
+    method: 'post',
+    data
+  })
+}
+
