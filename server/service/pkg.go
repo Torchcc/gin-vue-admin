@@ -210,7 +210,7 @@ func UpdatePkgDiseaseRelation(pkgDisease *model.PkgWithCtgNDisease) error {
 
 	if len(toDeleteIds) != 0 {
 		cmd, args, err := sqlx.In(
-			fmt.Sprintf(`UPDATE mkp_package_disease SET is_deleted = 1, update_time = UNIX_TIMESTAMP(now()) WHERE pkg_id = %d AND category_id IN (?)`, pkgDisease.ID),
+			fmt.Sprintf(`UPDATE mkp_package_disease SET is_deleted = 1, update_time = UNIX_TIMESTAMP(now()) WHERE pkg_id = %d AND disease_id IN (?)`, pkgDisease.ID),
 			toDeleteIds)
 		if err != nil {
 			global.GVA_LOG.Error(err)
