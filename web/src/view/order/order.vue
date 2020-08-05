@@ -218,7 +218,7 @@
 
           <el-col :span="7">
             <el-form-item label="订单号" prop="out_trade_no">
-              <el-input-number v-model="refundFormData.out_trade_no" placeholder="订单号" :disabled='true'></el-input-number>
+              <el-input v-model="refundFormData.out_trade_no" placeholder="订单号" :disabled='true'></el-input>
             </el-form-item>
           </el-col>
 
@@ -285,7 +285,7 @@
           handle_remark: null
         },
         refundFormData: {
-          out_trade_no:null,pkg_id:null,pkg_count:null,amount:null,order_id:null
+          out_trade_no:null,pkg_id:null,pkg_count:1,amount:null,order_id:null,mobile:null
         },
         rules: {
           id: [{
@@ -417,6 +417,7 @@
       async notifyRefundOk(row) {
         this.refundFormData.out_trade_no = row.out_trade_no;
         this.refundFormData.order_id = row.id;
+        this.refundFormData.mobile = row.mobile
         this.dialogRefundFormVisible = true;
       },
       async updateOrder(row) {
@@ -450,7 +451,7 @@
       },
       closeRefundDialog() {
         this.dialogRefundFormVisible = false;
-        this.refundFormData = {out_trade_no:null,pkg_id:null,pkg_count:null,amount:null,order_id:null}
+        this.refundFormData = {out_trade_no:null,pkg_id:null,pkg_count:null,amount:null,order_id:null,mobile:null}
       },
       async deleteOrder(row) {
         this.visible = false;

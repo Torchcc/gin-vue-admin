@@ -39,6 +39,12 @@ func UpdateOrder(order *model.Order) (err error) {
 	return err
 }
 
+func UpdateOrderStatus(orderId int64, status int8) (err error) {
+	const cmd = `UPDATE mko_order SET status = ? WHERE id = ? AND is_deleted = 0`
+	_, err = global.BIZ_DBX.Exec(cmd, status, orderId)
+	return
+}
+
 // @title    GetOrder
 // @description   get the info of a Order
 // @auth                     （2020/04/05  20:22）

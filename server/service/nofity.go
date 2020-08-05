@@ -27,3 +27,17 @@ func SmsNotifyAppointmentOk(input *model.SmsNotifyAppointmentOkInput) (err error
 	}
 	return
 }
+
+func SmsNotifyRefundOk(input *model.SmsNotifyRefundOkInput) (err error) {
+	var pkgName string
+	const cmd = `SELECT name FROM mkp_package WHERE id = ?`
+	if err = global.BIZ_DBX.Get(&pkgName, cmd, input.PkgId); err != nil {
+		global.GVA_LOG.Errorf("failed to notify refund ok, input is %v, err: [%s]", input, err.Error())
+		return
+	}
+	if err = sms.SendRefundOkMsg(input.Mobile, input.OutTradeNo, pkgName, input.Amount, input.PkgCount); err != nil {
+		global.GVA_LOG.Errorf("failed to notify refund ok, input is %v, err: [%s]", input, err.Error())
+		return
+	}
+	return
+}

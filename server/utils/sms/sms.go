@@ -2,6 +2,7 @@ package sms
 
 import (
 	"encoding/json"
+	"strconv"
 	"time"
 
 	"gin-vue-admin/global"
@@ -16,6 +17,8 @@ const (
 	SMS_SIGN = "迈康体检网"
 )
 
+var smsClient *sms.Client
+
 type smsParam struct {
 	// 格式 ["+8618520456660", ..., ]
 	PhoneNumberSet   []string
@@ -26,25 +29,22 @@ type smsParam struct {
 
 }
 
-// 发送预约成功的通知短信
-func SendAppointmentOkMsg(mobile, examineeName, outTradeNo, hospitalName, Addr string, examDate int64) (err error) {
-	examDateStr := time.Unix(examDate, 0).Format("2006年01月02日 ") + "07:30至12：00"
-
+func sendSms(mobile, tmplId string, tmplParamSet []string) (err error) {
 	credential := common.NewCredential(
 		global.GVA_CONFIG.Cos.SecretID,
 		global.GVA_CONFIG.Cos.SecretKey,
 	)
 	cpf := profile.NewClientProfile()
 	cpf.HttpProfile.Endpoint = ENDPOINT
-	client, _ := sms.NewClient(credential, global.GVA_CONFIG.Cos.Region, cpf)
+	smsClient, _ = sms.NewClient(credential, global.GVA_CONFIG.Cos.Region, cpf)
 
 	request := sms.NewSendSmsRequest()
 
 	payload := smsParam{
 		PhoneNumberSet:   []string{"+86" + mobile},
-		TemplateID:       global.GVA_CONFIG.ApmtOkMsgTmpl.TemplateID,
+		TemplateID:       tmplId,
 		Sign:             SMS_SIGN,
-		TemplateParamSet: []string{examineeName, outTradeNo, examDateStr, hospitalName, Addr},
+		TemplateParamSet: tmplParamSet,
 		SmsSdkAppid:      global.GVA_CONFIG.ApmtOkMsgTmpl.SmsSdkAppid,
 	}
 
@@ -53,12 +53,24 @@ func SendAppointmentOkMsg(mobile, examineeName, outTradeNo, hospitalName, Addr s
 	if err != nil {
 		return
 	}
-	_, err = client.SendSms(request)
+	_, err = smsClient.SendSms(request)
 	if _, ok := err.(*errors.TencentCloudSDKError); ok {
 		return
 	}
-	if err != nil {
-		return
-	}
 	return
+}
+
+// 发送预约成功的通知短信
+func SendAppointmentOkMsg(mobile, examineeName, outTradeNo, hospitalName, Addr string, examDate int64) (err error) {
+	examDateStr := time.Unix(examDate, 0).Format("2006年01月02日 ") + "07:30至12：00"
+	params := []string{examineeName, outTradeNo, examDateStr, hospitalName, Addr}
+	return sendSms(mobile, global.GVA_CONFIG.ApmtOkMsgTmpl.TemplateID, params)
+}
+
+// 发送退款成功的通知短信
+func SendRefundOkMsg(mobile, outTradeNo, pkgName string, amount float64, pkgCount int64) (err error) {
+	amountStr := strconv.FormatFloat(amount, 'f', 2, 64) + " 元"
+	pkgCountStr := strconv.FormatInt(pkgCount, 10)
+	params := []string{outTradeNo, pkgName, amountStr, pkgCountStr}
+	return sendSms(mobile, global.GVA_CONFIG.RefundOkMsgTmpl.TemplateID, params)
 }
