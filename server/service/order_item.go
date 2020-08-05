@@ -61,7 +61,7 @@ func GetOrderItemInfoList(info request.OrderItemSearch) (err error, list interfa
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.BIZ_DB.Model(&model.OrderItem{})
+	db := global.BIZ_DB.Model(&model.OrderItem{}).Where("is_deleted = ?", 0)
 	var orderItems []model.OrderItem
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.ID != 0 {

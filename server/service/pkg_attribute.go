@@ -61,7 +61,7 @@ func GetPkgAttrInfoList(info request.PkgAttrSearch) (err error, list interface{}
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.BIZ_DB.Model(&model.PkgAttr{})
+	db := global.BIZ_DB.Model(&model.PkgAttr{}).Where("is_deleted = ?", 0)
 	var pkgAttrs []model.PkgAttr
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.ID != 0 {

@@ -26,7 +26,7 @@ type smsParam struct {
 
 }
 
-// 目前只发送注册验证码， 需要发多种业务类型的短信模版的时候再抽象封装。
+// 发送预约成功的通知短信
 func SendAppointmentOkMsg(mobile, examineeName, outTradeNo, hospitalName, Addr string, examDate int64) (err error) {
 	examDateStr := time.Unix(examDate, 0).Format("2006年01月02日 ") + "07:30至12：00"
 

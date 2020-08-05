@@ -76,7 +76,7 @@ func GetDiseaseInfoList(info request.DiseaseSearch) (err error, list interface{}
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.BIZ_DB.Model(&model.Disease{})
+	db := global.BIZ_DB.Model(&model.Disease{}).Where("is_deleted = ?", 0)
 	var diseases []model.Disease
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Name != "" {

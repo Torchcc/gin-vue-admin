@@ -61,7 +61,7 @@ func GetPkgCategoryInfoList(info request.PkgCategorySearch) (err error, list int
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.BIZ_DB.Model(&model.PkgCategory{})
+	db := global.BIZ_DB.Model(&model.PkgCategory{}).Where("is_deleted = ?", 0)
 	var pkgCtgs []model.PkgCategory
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.ID != 0 {
