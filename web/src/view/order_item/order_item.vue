@@ -402,15 +402,15 @@ export default {
           update_time:null,
       };
     },
-    notifyAppointmentOk(row) {
-      const res = notifyAppointmentOk({
+    async notifyAppointmentOk(row) {
+      const res = await notifyAppointmentOk({
         out_trade_no: this.$route.query.out_trade_no,
         pkg_id: row.pkg_id,
         examinee_name: row.examinee_name,
         examine_date: row.examine_date,
         examinee_mobile: row.examinee_mobile
-      })
-      if (res.code === 0) {
+      });
+      if (res.code == 0) {
         this.$message({
           type: "success",
           message: "发送成功"
@@ -425,7 +425,7 @@ export default {
           type: "success",
           message: "删除成功"
         });
-        this.getTableData();
+        this.getAllOrderItemByOrderId(1, 1000);
       }
     },
     async enterDialog() {
