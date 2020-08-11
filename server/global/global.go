@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/jmoiron/sqlx"
 	oplogging "github.com/op/go-logging"
+	"github.com/patrickmn/go-cache"
 )
 
 var (
@@ -16,4 +17,6 @@ var (
 	GVA_CONFIG config.Server
 	// GVA_VP     *viper.Viper
 	GVA_LOG *oplogging.Logger
+	// 全局go-cache
+	GoCache *cache.Cache
 )

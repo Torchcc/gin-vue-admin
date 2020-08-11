@@ -36,7 +36,11 @@
       <el-table-column type="selection" width="55"></el-table-column>
 
       <el-table-column label="套餐id" prop="id" width="80"></el-table-column>
-      <el-table-column label="医院id" prop="hospital_id" width="80"></el-table-column>
+      <el-table-column label="所属医院" prop="hospital_id" width="80">
+        <template slot-scope="scope">
+          <div>{{ scope.row.hospital_id | formatHospitalName }}</div>
+        </template>
+      </el-table-column>
 
       <el-table-column label="套餐名字" prop="name" width="100"></el-table-column>
 
@@ -172,8 +176,8 @@
             <el-form-item label="套餐所属医院" prop="hospital_id">
               <el-select v-model="formData.hospital_id" placeholder="请选择套餐所属医院" clearable
                          :style="{width: '100%'}">
-                <el-option v-for="(item, index) in hospital_idOptions" :key="index" :label="item.label"
-                           :value="item.value" :disabled="item.disabled"></el-option>
+                <el-option v-for="(item, index) in hospitalOptions" :key="index" :label="item.name"
+                           :value="item.id" :disabled="item.disabled"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -246,9 +250,13 @@
     upatePkgCtgRelation,
     upatePkgDiseaseRelation
   } from "@/api/pkg";  //  此处请自行替换地址
+
+  import { getHospitalList } from "@/api/hospital";
+
   import {
     getPkgCategoryList,
   } from "@/api/pkg_category";
+
   import {
     getDiseaseList
   } from "@/api/disease"
@@ -318,13 +326,7 @@
           comment: [],
           tips: [],
         },
-        hospital_idOptions: [{
-          "label": "美年大健康",
-          "value": 1
-        }, {
-          "label": "茂名市人民医院",
-          "value": 0
-        }],
+        hospitalOptions: [],
         targetOptions: [{
           "label": "不限",
           "value": 0
@@ -339,8 +341,8 @@
           "value": 3
         }],
         diseaseOptions: [],
-        diseaseDict: new Map(),
-        targetDict: new Map([[0, "不限"], [1, "男士"], [2, "女-未婚"], [3, "女-已婚"]])
+        targetDict: new Map([[0, "不限"], [1, "男士"], [2, "女-未婚"], [3, "女-已婚"]]),
+        hospitalDict: new Map()
       };
     },
     filters: {
@@ -352,11 +354,15 @@
           return "";
         }
       },
-      formatDisease: function (diseaseCode) {
-        return that.diseaseDict.get(diseaseCode);
-      },
       formatTarget: function (targetCode) {
         return that.targetDict.get(targetCode);
+      },
+      // TODO 医院少的时候将就着用， 待优化
+      formatHospitalName: function(hospitalId) {
+        if (!that.hospitalDict.size) {
+          that.getHospitalDict();
+        }
+        return that.hospitalDict.get(hospitalId);
       },
       formatBoolean: function (bool) {
         if (bool != null) {
@@ -410,6 +416,18 @@
           }
         })
       },
+      getHospitalList() {
+        getHospitalList({page:1, pageSize: 1000}).then(res => {
+          if (res.code === 0) {
+            this.hospitalOptions = res.data.list;
+          }
+        })
+      },
+      getHospitalDict() {
+        for (let i = 0; i < this.hospitalOptions.length; i++) {
+          this.hospitalDict.set(this.hospitalOptions[i].id, this.hospitalOptions[i].name);
+        }
+      },
       handleAvatarSuccess(res) {
         for (let item of this.tableData) {
           if (item.id === res.data.id) {
@@ -417,6 +435,10 @@
             break;
           }
         }
+        this.$message({
+          type: "success",
+          message: "上传成功",
+        });
       },
       async updatePackage(row) {
         const res = await findPackage({id: row.id});
@@ -486,7 +508,7 @@
       this.getTableData();
       this.getPkgCategoryList();
       this.getPkgDiseaseList();
-      this.getDiseaseDict()
+      this.getHospitalList();
     },
     beforeCreate() {
       that = this
